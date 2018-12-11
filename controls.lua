@@ -1,37 +1,20 @@
-controls = {
-    onKeyPress = function()
+controls = {}
+function controls:onKeyPress()
     -- movement
     if love.keyboard.isDown("right") then
-            player.x = player.x + player.speed
-            player.direction = "right"
-        elseif love.keyboard.isDown("left") then
-            player.x = player.x - player.speed
-            player.direction = "left"
-        elseif love.keyboard.isDown("up") then
-            player.y = player.y - player.speed
-        elseif love.keyboard.isDown("down") then
-            player.y = player.y + player.speed
-        end
-        -- bullet
-        if player.bulletCooldown > 0 then
-            player.bulletCooldown = player.bulletCooldown -1
-        end
-        if love.keyboard.isDown("space") then
-            player.fire()
-        end
-
-        for i, b in pairs (player.bullets) do
-            -- b.direction = player.direction
-            if b.direction == "right" then
-                b.x = b.x + b.speed
-            elseif b.direction == "left" then
-                b.x = b.x - b.speed
-            end
-
-            -- removes bullets off the screen
-            if (b.x > 1000 or b.x < 0)then
-                table.remove(player.bullets, i)
-            end
-        end
+        player.x = math.min(player.x + player.speed, map.mapWidthPixels - player.width)
+        player.direction = "right"
+    elseif love.keyboard.isDown("left") then
+        player.x = math.max(0, player.x - player.speed)
+        player.direction = "left"
+    elseif love.keyboard.isDown("up") then
+        player.y = math.max(0, player.y - player.speed)
+    elseif love.keyboard.isDown("down") then
+        -- print(player.y)
+        print(map.camY)
+        player.y = math.min(player.y + player.speed, map.mapHeightPixels - player.height)
+    elseif love.keyboard.isDown("escape") then
+        love.event.quit()
     end
-}
+    
+end
